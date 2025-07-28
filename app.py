@@ -8,6 +8,15 @@ from gitlab_wrapper.client import GitLabClient  # For user APIs only
 
 
 # --------- Compliance check logic ---------
+def check_vscode_settings(project, branch="main"):
+    try:
+        vscode_items = project.repository_tree(path=".vscode", ref=branch)
+        filenames = [item["name"].lower() for item in vscode_items]
+        return "settings.json" in filenames
+    except Exception:
+        return False
+
+
 def check_project_compliance(project):
     required_files = {
         "README.md": ["README.md"],
@@ -20,10 +29,15 @@ def check_project_compliance(project):
         branch = getattr(project, "default_branch", None) or "main"
         tree = project.repository_tree(ref=branch)
         filenames = [item["name"].lower() for item in tree]
+
         # Check for required files
         for label, variants in required_files.items():
             found = any(variant.lower() in filenames for variant in variants)
             report[label] = found
+
+        # Check for .vscode/settings.json
+        report["vscode_settings"] = check_vscode_settings(project, branch=branch)
+
         report["issue_templates"] = _has_gitlab_file(
             project,
             ["issue_template", "issues_template", "issue_templete", "issue_templates"],
@@ -122,6 +136,7 @@ def get_suggestions_for_missing_items(report):
         "description_present": "Provide a meaningful project description in GitLab settings.",
         "tags_present": "Tag your project releases for version control and clarity.",
         "README.md": "Add a `README.md` file at the root of the repository with setup and usage instructions.",
+        "vscode_settings": "Add a `.vscode/settings.json` file to configure editor settings and ensure a consistent development environment.",
     }
     image_map = {
         "CONTRIBUTING.md": "Contributing.png",
@@ -132,11 +147,13 @@ def get_suggestions_for_missing_items(report):
         "description_present": "project-description.png",
         "tags_present": "Tags.png",
         "README.md": "Readme.png",
+        "vscode_settings": "vscode-settings.png",  # Add this image in your assets folder if desired
     }
     missing_items = [
         key for key, status in report.items() if key != "error" and status is False
     ]
     if missing_items:
+        # Show .gitlab directory image first if needed
         if not report.get("issue_templates") or not report.get(
             "merge_request_templates"
         ):
@@ -239,14 +256,11 @@ elif mode == "Check User Profile README":
         if not input_val:
             st.warning("Please enter a username, user ID or URL.")
         else:
-            # Try to fetch user from gl:
             try:
-                # Accepts user id or username or URL
                 if input_val.isdigit():
                     user_obj = gl.users.get(int(input_val))
                 else:
                     username = extract_path_from_url(input_val)
-                    # GitLab does not have get_by_username in API v4, so scan all users:
                     result = gl.users.list(username=username)
                     if not result:
                         raise Exception("User not found")
@@ -296,17 +310,14 @@ elif mode == "Get User Info":
                 else:
                     username = extract_path_from_url(input_val)
                     user = client.users.get_by_username(username)
-                # User fetched, display main info:
                 st.write(f"**Name:** {user['name']}")
                 st.write(f"**Username:** @{user['username']}")
                 st.write(f"**User ID:** {user['id']}")
-                st.write(f"**Bio:** {user.get('bio', '') or '—'}")
                 if user.get("avatar_url"):
                     st.image(user["avatar_url"], width=80)
-
                 st.write(f"[View GitLab Profile]({user.get('web_url', '')})")
 
-                # --- Info Section ---
+                # Account statistics
                 st.markdown("#### 📊 Account Statistics")
                 col1, col2 = st.columns(2)
                 with col1:
@@ -329,7 +340,7 @@ elif mode == "Get User Info":
                         mr_count if isinstance(mr_count, int) else "N/A",
                     )
 
-                # If there were API error messages (strings), show them as warnings:
+                # Show warnings if API calls failed
                 for label, count in [
                     ("projects", proj_count),
                     ("groups", group_count),
