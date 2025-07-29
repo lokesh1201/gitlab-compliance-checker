@@ -23,9 +23,7 @@ def has_gitlab_file_anywhere(project, base_names, branch="main", extensions=None
     """
     if extensions is None:
         extensions = ["", ".md", ".txt"]
-    targets = {
-        name.lower() + ext.lower() for name in base_names for ext in extensions
-    }
+    targets = {name.lower() + ext.lower() for name in base_names for ext in extensions}
 
     def files_in_path(path):
         try:
@@ -99,6 +97,7 @@ def check_project_compliance(project, branch=None):
 def patch_gitlab_project():
     def check_compliance(self, branch=None):
         return check_project_compliance(self, branch=branch)
+
     Project.check_compliance = check_compliance
 
 
@@ -175,7 +174,9 @@ def get_suggestions_for_missing_items(report):
         key for key, status in report.items() if key != "error" and status is False
     ]
     if missing_items:
-        if not report.get("issue_templates") or not report.get("merge_request_templates"):
+        if not report.get("issue_templates") or not report.get(
+            "merge_request_templates"
+        ):
             st.image(
                 "assets/files.png",
                 caption="Correct file structure inside `.gitlab/` directory",
@@ -238,7 +239,6 @@ if mode == "Check Project Compliance":
     check_triggered = st.session_state.get("project_compliance_triggered", False)
     button_clicked = st.button("Check Compliance", key="project_compliance_button")
 
-
     if check_triggered or button_clicked:
         st.session_state["project_compliance_triggered"] = False
         input_str = project_input.strip()
@@ -263,7 +263,6 @@ if mode == "Check Project Compliance":
                 st.session_state["selected_project_id"] = None
                 st.session_state["branches"] = []
 
-
     # --- UI for branch selection & compliance ---
     selected_project_id = st.session_state.get("selected_project_id")
     branches = st.session_state.get("branches") or []
@@ -281,23 +280,27 @@ if mode == "Check Project Compliance":
             else:
                 default_idx = 0 if branches else None
 
-
             if branches:
                 selected_branch = st.selectbox(
                     "Select branch for compliance check:",
                     branches,
                     index=default_idx if default_idx is not None else 0,
-                    key="branch_selector"
+                    key="branch_selector",
                 )
             else:
                 selected_branch = default_branch
-                st.warning("No branches found, will check default/main branch if possible.")
+                st.warning(
+                    "No branches found, will check default/main branch if possible."
+                )
 
-
-            run_check = st.button("Run Compliance Check on Selected Branch", key="run_compliance_check")
-            run_automatic = (len(branches) == 1 and (branches[0] == default_branch))
+            run_check = st.button(
+                "Run Compliance Check on Selected Branch", key="run_compliance_check"
+            )
+            run_automatic = len(branches) == 1 and (branches[0] == default_branch)
             if run_check or run_automatic:
-                report = check_project_compliance(project=project, branch=selected_branch)
+                report = check_project_compliance(
+                    project=project, branch=selected_branch
+                )
                 st.write(
                     f"### Project: {project.path_with_namespace} (ID: {project.id}) | Branch: `{selected_branch}`"
                 )
@@ -372,7 +375,6 @@ elif mode == "Get User Info":
     check_triggered = st.session_state.get("user_info_triggered", False)
     button_clicked = st.button("Get User Info", key="user_info_button")
 
-
     if check_triggered or button_clicked:
         st.session_state["user_info_triggered"] = False
         input_val = user_input.strip()
@@ -391,7 +393,6 @@ elif mode == "Get User Info":
                 if user.get("avatar_url"):
                     st.image(user["avatar_url"], width=80)
                 st.write(f"[View GitLab Profile]({user.get('web_url', '')})")
-
 
                 # Account statistics
                 st.markdown("#### 📊 Account Statistics")
@@ -416,7 +417,6 @@ elif mode == "Get User Info":
                         mr_count if isinstance(mr_count, int) else "N/A",
                     )
 
-
                 # Show warnings if API calls failed
                 for label, count in [
                     ("projects", proj_count),
@@ -426,7 +426,6 @@ elif mode == "Get User Info":
                 ]:
                     if isinstance(count, str) and count.startswith("Error:"):
                         st.warning(f"Could not get {label} count: {count[6:].strip()}")
-
 
             except Exception as e:
                 st.error(f"User not found or error: {e}")
