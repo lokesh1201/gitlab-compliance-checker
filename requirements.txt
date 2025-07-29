@@ -1,3 +1,5 @@
 streamlit
 python-gitlab
 python-dotenv
+requests
+gitlab-utils
