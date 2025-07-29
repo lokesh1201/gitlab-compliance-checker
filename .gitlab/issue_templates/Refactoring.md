@@ -1,50 +1,40 @@
 ## Summary
 
 <!--
-Please briefly describe what part of the code base needs to be refactored.
+Briefly describe the part of the codebase that needs to be refactored.
+Mention if it involves technical debt, code duplication, or outdated patterns.
 -->
 
 ## Improvements
 
 <!--
-Explain the benefits of refactoring this code.
-See also https://about.gitlab.com/handbook/values/index.html#say-why-not-just-what
+Explain the expected benefits of this refactoring.
+For example: better readability, reduced complexity, easier testing, or performance gains.
 -->
 
 ## Risks
 
 <!--
-Please list features that can break because of this refactoring and how you intend to solve that.
+List features or components that might break as a result of this change.
+Explain how these risks can be mitigated (e.g., through testing or phased rollout).
 -->
 
-## Involved components
+## Affected Components
 
 <!--
-List files or directories that will be changed by the refactoring.
+List specific files, directories, or modules that will be involved in the refactoring.
 -->
 
-## Optional: Intended side effects
+## Optional: Intended Side Effects
 
 <!--
-If the refactoring involves changes apart from the main improvements (such as a better UI), list them here.
-It may be a good idea to create separate issues and link them here.
+Mention any related improvements that will happen alongside the refactoring (e.g., UI cleanup, performance boosts).
+Consider creating separate issues for larger changes and linking them here.
 -->
 
-
-## Optional: Missing test coverage
+## Optional: Missing Test Coverage
 
 <!--
-If you are aware of tests that need to be written or adjusted apart from unit tests for the changed components,
-please list them here.
+List any tests that need to be written or improved as part of the refactoring effort.
+Include integration, functional, or regression tests if applicable.
 -->
-
-<!--
-Please select the appropriate label from the following:
-    ~"feature::addition"
-    ~"type::maintenance"
-    ~"maintenance::refactor"
-    ~"maintenance::pipelines"
-    ~"maintenance::workflow"
--->
-
-/label ~"type::maintenance"

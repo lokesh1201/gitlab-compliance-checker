@@ -1,41 +1,48 @@
-- [ ] Start this issue's title with `Docs:` or `Docs feedback:`.
-
-## Problem to solve
-
 <!--
-Include the following detail as necessary:
+Use this template for suggesting new documentation or proposing updates to existing documentation in the gitlab-utils project.
 
-* What product or feature(s) affected?
-* What docs or doc section affected? Include links or paths.
-* Is there a problem with a specific document, or a feature/process that's not addressed sufficiently in docs?
-* Any other ideas or requests?
+Note: If the documentation is part of a new feature under development, please use the Feature Request template instead.
 -->
 
-## Further details
+- [ ] Start the issue title with `Docs:` or `Docs feedback:` for consistency.
+
+## Problem to Solve
 
 <!--
-* Any concepts, procedures, reference info we could add to make it easier to successfully use GitLab?
-* Include use cases, benefits, and/or goals for this work.
-* If adding content: What audience is it intended for? (What roles and scenarios?)
-  For ideas, see personas at https://handbook.gitlab.com/handbook/product/personas/ or the persona labels at
-  https://gitlab.com/groups/gitlab-org/-/labels?subscribed=&search=persona%3A
+Describe the issue or gap in the documentation:
+
+- What part of the project or feature does it relate to?
+- What file, section, or concept needs improvement or clarification?
+- Is something missing, outdated, or confusing?
+-->
+
+## Further Details
+
+<!--
+Optional:
+
+- What audience is this documentation for? (e.g. developers, contributors, end users)
+- What benefits will updating or adding this documentation bring?
+- Are there specific scenarios or use cases that need to be covered?
 -->
 
 ## Proposal
 
-<!-- Further specifics for how can we solve the problem. -->
+<!--
+Describe how the documentation can be improved or added. Be as specific as possible.
+Example: "Add a section explaining how to configure X in the README.md file."
+-->
 
-## Who can address the issue
+## Who Can Address the Issue
 
-<!-- What if any special expertise is required to resolve this issue? -->
+<!--
+Note any required expertise (if any) or if it’s suitable for first-time contributors.
+-->
 
-## Other links/references
+## Related Links or References
 
-<!-- For example, related GitLab issues/MRs -->
+<!--
+List any related issues, merge requests, or external references if available.
+-->
 
-/label ~"documentation"
-/label ~"docs-only"
 
-/label ~"type::maintenance" ~"maintenance::refactor"
-
-/milestone %Backlog

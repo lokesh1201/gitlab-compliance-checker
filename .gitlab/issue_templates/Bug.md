@@ -1,94 +1,55 @@
+<!--
+Please read this before submitting a new bug!
+
+Before creating an issue, check if a similar issue already exists under these labels:
+- Regression: https://code.swecha.org/tools/gitlab-compliance-checker//issues?label_name%5B%5D=regression
+- Bug: https://code.swecha.org/tools/gitlab-compliance-checker//issues?label_name%5B%5D=type::bug
+
+Make sure the issue you're reporting is not a duplicate.
+-->
+
 ### Summary
 
-<!-- Summarize the bug encountered concisely. -->
+<!-- Concisely summarize the bug you encountered. -->
 
-### Steps to reproduce
+### Steps to Reproduce
 
-<!-- Describe how one can reproduce the issue - this is very important. Please use an ordered list. -->
+<!-- Clearly list the steps to reproduce the issue. Use an ordered list if possible. Example:
+1. Go to '...'
+2. Click on '...'
+3. Observe the error -->
 
-### Example Project
+### Expected Behavior
 
-<!-- If possible, please create an example project here on GitLab.com that exhibits the problematic 
-behavior, and link to it here in the bug report. If you are using an older version of GitLab, this 
-will also determine whether the bug is fixed in a more recent version. -->
+<!-- What should have happened instead? -->
 
-### What is the current *bug* behavior?
+### Actual Behavior
 
-<!-- Describe what actually happens. -->
+<!-- What actually happened? Include error messages, unexpected output, etc. -->
 
-### What is the expected *correct* behavior?
+### Example or Affected Project
 
-<!-- Describe what you should see instead. -->
+<!-- Link to a relevant test project or describe how this affects gitlab-utils -->
 
-### Relevant logs and/or screenshots
+### Logs or Screenshots
 
-<!-- Paste any relevant logs - please use code blocks (```
- as it's tough to read otherwise. -->
+<!-- Paste relevant logs, screenshots, or outputs. Use triple backticks (```) for code/log formatting -->
 
-### Output of checks
-
-<!-- If you are reporting a bug on GitLab.com, uncomment below -->
-
-<!-- This bug happens on GitLab.com -->
-
-<!-- and uncomment below if you have /label privileges -->
-<!-- /label ~"reproduced on GitLab.com" -->
-<!-- or follow up with an issue comment of `@gitlab-bot label ~"reproduced on GitLab.com"` if you do not -->
-
-#### Results of GitLab environment info
-
-<!--  Input any relevant GitLab environment information if needed. -->
+### Environment Details
 
 <details>
-<summary>Expand for output related to GitLab environment info</summary>
+<summary>Click to expand environment information</summary>
 
 <pre>
-
-(For installations with omnibus-gitlab package run and paste the output of:
-`sudo gitlab-rake gitlab:env:info`)
-
-(For installations from source run and paste the output of:
-`sudo -u git -H bundle exec rake gitlab:env:info RAILS_ENV=production`)
-
+(If applicable, provide relevant details such as OS, Python version, GitLab version, or environment setup.)
 </pre>
+
 </details>
 
-#### Results of GitLab application Check
+### Checks Performed
 
-<!--  Input any relevant GitLab application check information if needed. -->
+<!-- Mention if you ran any tests or checks that failed or passed -->
 
-<details>
-<summary>Expand for output related to the GitLab application check</summary>
-<pre>
+### Possible Fix or Code Reference
 
-(For installations with omnibus-gitlab package run and paste the output of:
-`sudo gitlab-rake gitlab:check SANITIZE=true`)
-
-(For installations from source run and paste the output of:
-`sudo -u git -H bundle exec rake gitlab:check RAILS_ENV=production SANITIZE=true`)
-
-(we will only investigate if the tests are passing)
-
-</pre>
-</details>
-
-### Possible fixes
-
-<!-- If you can, link to the line of code that might be responsible for the problem. -->
-
-### Patch release information for backports
-
-If the bug fix needs to be backported in a [patch release](https://handbook.gitlab.com/handbook/engineering/releases/patch-releases) to a version
-under [the maintenance policy](https://docs.gitlab.com/policy/maintenance/), please follow the steps on the
-[patch release runbook for GitLab engineers](https://gitlab.com/gitlab-org/release/docs/-/blob/master/general/patch/engineers.md).
-
-Refer to the [internal "Release Information" dashboard](https://dashboards.gitlab.net/d/delivery-release_info/delivery3a-release-information?orgId=1)
-for information about the next patch release, including the targeted versions, expected release date, and current status.
-
-#### High-severity bug remediation
-
-To remediate high-severity issues requiring an [internal release](https://handbook.gitlab.com/handbook/engineering/releases/internal-releases/) for single-tenant SaaS instances,
-refer to the [internal release process for engineers](https://gitlab.com/gitlab-org/release/docs/-/blob/master/general/internal-releases/engineers.md?ref_type=heads).
-
-/label ~"type::bug"
-<!-- If you don't have /label privileges, follow up with an issue comment of `@gitlab-bot label ~"type::bug"` -->
+<!-- If you have a suggestion or know the affected code, link to the line or section here -->
