@@ -45,8 +45,8 @@ def check_project_compliance(project, branch=None):
     required_files = {
         "README.md": ["README.md"],
         "CONTRIBUTING.md": ["CONTRIBUTING.md"],
-        "CHANGELOG": ["CHANGELOG", "CHANGELOG.md", "CHANGELOG.txt"],
-        "LICENSE": ["LICENSE", "LICENSE.md", "LICENSE.txt"],
+        "CHANGELOG": ["CHANGELOG", "CHANGELOG.md"],
+        "LICENSE": ["LICENSE", "LICENSE.md"],
     }
     report = {}
     try:
