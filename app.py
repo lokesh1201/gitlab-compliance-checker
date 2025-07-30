@@ -518,7 +518,7 @@ if mode == "Check Project Compliance":
                     # --- New Section: Conditional Documentation ---
                     docs_map = {
                         "pyproject.toml": """
-- [`pyproject.toml`](https://peps.python.org/pep-0518/)
+- [`pyproject.toml`](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/)
   Configuration for Python project build system, dependencies, and packaging metadata. Ensures reproducible builds and integration with tools like Poetry or Flit.
 """,
                         ".vscode/settings.json": """
@@ -530,11 +530,11 @@ if mode == "Check Project Compliance":
   Ensure Ruff is configured as the Python linter for speedy and consistent linting.
 """,
                         "vscode_extensions_exists": """
-- [`.vscode/extensions.json`](https://code.visualstudio.com/docs/editor/extension-marketplace#_recommended-extensions)
+- [`.vscode/extensions.json`]((https://code.visualstudio.com/docs/configure/extensions/extension-marketplace#_workspace-recommended-extensions)
   Lists recommended VSCode extensions to install for efficient coding and linting.
 """,
                         "vscode_launch_exists": """
-- [`.vscode/launch.json`](https://code.visualstudio.com/docs/editor/debugging#_launch-configurations)
+- [`.vscode/launch.json`](https://code.visualstudio.com/docs/debugtest/debugging#_before-you-start-debugging)
   Defines debug launch profiles for running and debugging the project inside VSCode.
 """,
                     }
