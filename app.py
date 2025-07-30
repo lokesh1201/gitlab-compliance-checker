@@ -530,7 +530,7 @@ if mode == "Check Project Compliance":
   Ensure Ruff is configured as the Python linter for speedy and consistent linting.
 """,
                         "vscode_extensions_exists": """
-- [`.vscode/extensions.json`]((https://code.visualstudio.com/docs/configure/extensions/extension-marketplace#_workspace-recommended-extensions)
+- [`.vscode/extensions.json`](https://code.visualstudio.com/docs/configure/extensions/extension-marketplace#_workspace-recommended-extensions)
   Lists recommended VSCode extensions to install for efficient coding and linting.
 """,
                         "vscode_launch_exists": """
