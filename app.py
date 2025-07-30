@@ -24,12 +24,15 @@ def check_vscode_settings(project, branch="main"):
         return "settings.json" in [item["name"].lower() for item in items]
     except Exception:
         return False
+
+
 def check_vscode_file_exists(project, filename, branch="main"):
     try:
         items = project.repository_tree(path=".vscode", ref=branch)
         return filename.lower() in [item["name"].lower() for item in items]
     except Exception:
         return False
+
 
 def check_license_content(project, branch="main"):
     """Strict check for AGPLv3 license"""
@@ -52,10 +55,10 @@ def check_license_content(project, branch="main"):
 
 
 def check_vscode_settings_content(project, branch="main"):
-    """Check if settings.json has ruff and uv"""
+    """Check if settings.json has ruff"""
     content = read_file_content(project, ".vscode/settings.json", branch)
     if not content:
-        return {"exists": False, "has_ruff": False, "has_uv": False}
+        return {"exists": False, "has_ruff": False}
     try:
         import json
 
@@ -64,13 +67,9 @@ def check_vscode_settings_content(project, branch="main"):
             config.get("python", {}).get("linting", {}).get("provider") == "ruff"
             or "ruff" in str(config.get("python", {})).lower()
         )
-        has_uv = (
-            "uv" in str(config.get("python", {}).get("defaultInterpreterPath", ""))
-            or "uv" in str(config).lower()
-        )
-        return {"exists": True, "has_ruff": has_ruff, "has_uv": has_uv}
+        return {"exists": True, "has_ruff": has_ruff}
     except Exception:
-        return {"exists": True, "has_ruff": False, "has_uv": False}
+        return {"exists": True, "has_ruff": False}
 
 
 def list_markdown_files_in_folder(project, folder_path, branch="main"):
@@ -140,10 +139,13 @@ def check_project_compliance(project, branch=None):
 
         vscode_content = check_vscode_settings_content(project, branch)
         report["vscode_has_ruff"] = vscode_content["has_ruff"]
-        report["vscode_has_uv"] = vscode_content["has_uv"]
         report["vscode_config_exists"] = vscode_content["exists"]
-        report["vscode_extensions_exists"] = check_vscode_file_exists(project, "extensions.json", branch)
-        report["vscode_launch_exists"] = check_vscode_file_exists(project, "launch.json", branch)
+        report["vscode_extensions_exists"] = check_vscode_file_exists(
+            project, "extensions.json", branch
+        )
+        report["vscode_launch_exists"] = check_vscode_file_exists(
+            project, "launch.json", branch
+        )
 
         # Templates
         template_details = check_templates_presence(project, branch)
@@ -203,7 +205,7 @@ def get_suggestions_for_missing_items(report):
         ),
         (
             "LICENSE",
-            "Include a `LICENSE` file to define the legal usage of your project.",
+            "Include a `AGPLv3 LICENSE` file to define the legal usage of your project.",
         ),
         (
             "license_valid",
@@ -234,18 +236,12 @@ def get_suggestions_for_missing_items(report):
             "Ensure `.vscode/settings.json` includes Ruff as the linter.",
         ),
         (
-            "vscode_has_uv",
-            "Ensure `.vscode/settings.json` uses `uv` for Python environment management.",
-        ),
-
-        (
             "vscode_extensions_exists",
             "Add a `.vscode/extensions.json` file to configure recommended VSCode extensions.",
         ),
         (
             "vscode_launch_exists",
             "Add a `.vscode/launch.json` file to configure debug launch profiles in VSCode.",
-
         ),
         (
             "description_present",
@@ -265,7 +261,6 @@ def get_suggestions_for_missing_items(report):
         "pyproject.toml": "pyproject-toml.png",
         ".vscode/settings.json": "vscode-settings.png",
         "vscode_has_ruff": "vscode-ruff.png",
-        "vscode_has_uv": "vscode-uv.png",
         "vscode_extensions_exists": "vscode-extensions.png",
         "vscode_launch_exists": "vscode-launch.png",
         "description_present": "project-description.png",
@@ -307,6 +302,29 @@ def get_suggestions_for_missing_items(report):
                     st.image(f"assets/{img_file}", width=400)
                 except Exception:
                     pass
+
+
+# --- VSCode & pyproject.toml Documentation Markdown ---
+def render_vscode_and_pyproject_docs():
+    st.markdown(
+        """
+### 🛠️ Documentation for `.vscode` Configuration Files and `pyproject.toml`
+
+These files help maintain consistent development environment and build configurations across the team.
+
+- [`.vscode/launch.json`](https://code.visualstudio.com/docs/editor/debugging#_launch-configurations)
+  Defines debug launch profiles for running and debugging the project inside VSCode.
+
+- [`.vscode/extensions.json`](https://code.visualstudio.com/docs/editor/extension-marketplace#_recommended-extensions)
+  Lists recommended VSCode extensions to install for efficient coding and linting.
+
+- [`.vscode/settings.json`](https://code.visualstudio.com/docs/getstarted/settings)
+  Contains workspace-specific editor settings such as Python interpreter path, linters (e.g., Ruff), and environment management (`uv`).
+
+- [`pyproject.toml`](https://peps.python.org/pep-0518/)
+  Configuration for Python project build system, dependencies, and packaging metadata. Ensures reproducible builds and integration with tools like Poetry or Flit.
+        """
+    )
 
 
 # --------- Main Streamlit App ---------
@@ -437,7 +455,6 @@ if mode == "Check Project Compliance":
                             "pyproject.toml": "pyproject.toml",
                             "vscode_settings": ".vscode/settings.json",
                             "vscode_has_ruff": ".vscode/settings.json has Ruff",
-                            "vscode_has_uv": ".vscode/settings.json has UV",
                             "vscode_extensions_exists": ".vscode/extensions.json",
                             "vscode_launch_exists": ".vscode/launch.json",
                         },
@@ -453,7 +470,6 @@ if mode == "Check Project Compliance":
                             for key, display_name in items.items():
                                 status = report.get(key, False)
 
-                                # Rename display key
                                 if key == "vscode_settings":
                                     display_name = ".vscode/settings.json"
 
@@ -499,10 +515,57 @@ if mode == "Check Project Compliance":
                     else:
                         get_suggestions_for_missing_items(updated_report)
 
-        except Exception as e:
-            st.error(f"Error loading project and branches: {e}")
+                    # --- New Section: Conditional Documentation ---
+                    docs_map = {
+                        "pyproject.toml": """
+- [`pyproject.toml`](https://peps.python.org/pep-0518/)
+  Configuration for Python project build system, dependencies, and packaging metadata. Ensures reproducible builds and integration with tools like Poetry or Flit.
+""",
+                        ".vscode/settings.json": """
+- [`.vscode/settings.json`](https://code.visualstudio.com/docs/getstarted/settings)
+  Contains workspace-specific editor settings such as Python interpreter path, linters (e.g., Ruff), and environment management.
+""",
+                        "vscode_has_ruff": """
+- [Ruff Linter in `.vscode/settings.json`](https://docs.astral.sh/ruff/editors/settings/#vs-code)
+  Ensure Ruff is configured as the Python linter for speedy and consistent linting.
+""",
+                        "vscode_extensions_exists": """
+- [`.vscode/extensions.json`](https://code.visualstudio.com/docs/editor/extension-marketplace#_recommended-extensions)
+  Lists recommended VSCode extensions to install for efficient coding and linting.
+""",
+                        "vscode_launch_exists": """
+- [`.vscode/launch.json`](https://code.visualstudio.com/docs/editor/debugging#_launch-configurations)
+  Defines debug launch profiles for running and debugging the project inside VSCode.
+""",
+                    }
 
-# ---------- MODE: User Profile README ----------
+                    relevant_keys = [
+                        "pyproject.toml",
+                        ".vscode/settings.json",
+                        "vscode_has_ruff",
+                        "vscode_extensions_exists",
+                        "vscode_launch_exists",
+                    ]
+
+                    missing_keys = [
+                        k for k in relevant_keys if not updated_report.get(k, False)
+                    ]
+
+                    if missing_keys:
+                        st.markdown("---")
+                        st.subheader("📖 Documentation for Missing Configuration Files")
+                        with st.expander(
+                            "Why these .vscode and pyproject.toml files matter",
+                            expanded=False,
+                        ):
+                            for key in missing_keys:
+                                doc_text = docs_map.get(key)
+                                if doc_text:
+                                    st.markdown(doc_text)
+
+        except Exception as e:
+            st.error(f"Error accessing project: {str(e)}")
+
 # ---------- MODE: User Profile README ----------
 elif mode == "Check User Profile README":
     st.subheader("✅ Check if user has a project named after them with README.md")
@@ -607,6 +670,7 @@ elif mode == "Check User Profile README":
                         st.image("assets/Readme.png")
                     except Exception:
                         pass
+
 # ---------- MODE: Get User Info ----------
 elif mode == "Get User Info":
     st.subheader("👤 User Info Lookup")
