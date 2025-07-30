@@ -24,7 +24,12 @@ def check_vscode_settings(project, branch="main"):
         return "settings.json" in [item["name"].lower() for item in items]
     except Exception:
         return False
-
+def check_vscode_file_exists(project, filename, branch="main"):
+    try:
+        items = project.repository_tree(path=".vscode", ref=branch)
+        return filename.lower() in [item["name"].lower() for item in items]
+    except Exception:
+        return False
 
 def check_license_content(project, branch="main"):
     """Strict check for AGPLv3 license"""
@@ -137,6 +142,8 @@ def check_project_compliance(project, branch=None):
         report["vscode_has_ruff"] = vscode_content["has_ruff"]
         report["vscode_has_uv"] = vscode_content["has_uv"]
         report["vscode_config_exists"] = vscode_content["exists"]
+        report["vscode_extensions_exists"] = check_vscode_file_exists(project, "extensions.json", branch)
+        report["vscode_launch_exists"] = check_vscode_file_exists(project, "launch.json", branch)
 
         # Templates
         template_details = check_templates_presence(project, branch)
@@ -230,6 +237,16 @@ def get_suggestions_for_missing_items(report):
             "vscode_has_uv",
             "Ensure `.vscode/settings.json` uses `uv` for Python environment management.",
         ),
+
+        (
+            "vscode_extensions_exists",
+            "Add a `.vscode/extensions.json` file to configure recommended VSCode extensions.",
+        ),
+        (
+            "vscode_launch_exists",
+            "Add a `.vscode/launch.json` file to configure debug launch profiles in VSCode.",
+
+        ),
         (
             "description_present",
             "Provide a meaningful project description in GitLab settings.",
@@ -249,6 +266,8 @@ def get_suggestions_for_missing_items(report):
         ".vscode/settings.json": "vscode-settings.png",
         "vscode_has_ruff": "vscode-ruff.png",
         "vscode_has_uv": "vscode-uv.png",
+        "vscode_extensions_exists": "vscode-extensions.png",
+        "vscode_launch_exists": "vscode-launch.png",
         "description_present": "project-description.png",
         "tags_present": "Tags.png",
     }
@@ -419,6 +438,8 @@ if mode == "Check Project Compliance":
                             "vscode_settings": ".vscode/settings.json",
                             "vscode_has_ruff": ".vscode/settings.json has Ruff",
                             "vscode_has_uv": ".vscode/settings.json has UV",
+                            "vscode_extensions_exists": ".vscode/extensions.json",
+                            "vscode_launch_exists": ".vscode/launch.json",
                         },
                     }
 
