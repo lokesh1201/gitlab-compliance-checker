@@ -189,7 +189,7 @@ def get_suggestions_for_missing_items(report):
         ),
         (
             "LICENSE",
-            "Include a `LICENSE` file to define the legal usage of your project.",
+            "Include a `AGPLv3 LICENSE` file to define the legal usage of your project.",
             "license-example.png",
         ),
         (
