@@ -1,0 +1,54 @@
+[project]
+name = "gitlab-compliance-checker"
+version = "0.1.0"
+description = "A Python tool to check GitLab project compliance with predefined rules."
+authors = [
+  { name = "Lokesh Manchala", email = "manchalalokesh2003@gmail.com" }
+]
+readme = "README.md"
+license = { text = "GNU Affero General Public License v3.0" }
+requires-python = ">=3.11"
+dependencies = [
+  "requests>=2.31.0",
+  "streamlit>=1.33.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "ruff",
+  "pytest",
+  "requests-mock",
+  "pre-commit"
+]
+
+[tool.hatch.build]
+packages = ["gitlab_compliance_checker"]
+include = [
+  "README.md",
+  "LICENSE",
+  "CHANGELOG.md",
+  "CONTRIBUTING.md",
+  "CODE_OF_CONDUCT.md",
+  "assets/*"
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "C", "B"]
+exclude = ["tests/*"]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q"
+testpaths = ["tests"]
+
+[project.urls]
+"Homepage" = "https://code.swecha.org/tools/gitlab-compliance-checker"
+"Issue Tracker" = "https://code.swecha.org/tools/gitlab-compliance-checker/-/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
